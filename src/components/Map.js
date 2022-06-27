@@ -14,13 +14,13 @@ export default function Map(props) {
       }}
     >
       <MapContainer
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: "100%", width: "100%", cursor: "crosshair" }}
         center={[51.505, -0.09]}
         zoom={12}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="Tiles &copy; Esri | Leaflet"
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
         />
         <Locate></Locate>
       </MapContainer>
