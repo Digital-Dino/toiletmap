@@ -1,6 +1,7 @@
 import { MapContainer } from "react-leaflet/MapContainer";
-import { TileLayer } from "react-leaflet";
+import { Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import Locate from "./Locate";
+import { useState } from "react";
 
 export default function Map(props) {
   return (
@@ -16,7 +17,7 @@ export default function Map(props) {
       <MapContainer
         style={{ height: "100%", width: "100%", cursor: "crosshair" }}
         center={[51.505, -0.09]}
-        zoom={12}
+        zoom={15}
       >
         <TileLayer
           attribution="Tiles &copy; Esri | Leaflet"

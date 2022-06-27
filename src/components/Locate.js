@@ -1,27 +1,45 @@
-import { useEffect, useRef, useState } from "react";
-import { useMap } from "react-leaflet";
-import { Marker } from "react-leaflet";
+import { useEffect, useContext } from "react";
 import L from "leaflet";
+import { Marker, Popup, useMapEvents } from "react-leaflet";
+import PositionsCon from "../PositionsCon";
 
 export default function Locate(props) {
-  const map = useMap();
-  const [locations, setLocations] = useState([]);
-  map.locate().on("locationfound", (e) => {
-    map.flyTo(e.latlng);
-    // L.marker(e.latlng)
-    //   .addTo(map)
-    //   .bindPopup("<strong>You are here! 💩</strong>")
-    //   .openPopup();
+  const ctx = useContext(PositionsCon);
+
+  const map = useMapEvents({
+    click(e) {
+      ctx.setPositions((prevState) => {
+        if (prevState === null) {
+          return [e.latlng];
+        } else {
+          return [...prevState, e.latlng];
+        }
+      });
+    },
+    locationfound(e) {
+      map.flyTo(e.latlng);
+      let popup = new L.popup()
+        .setLatLng(e.latlng)
+        .setContent("You are here 💩")
+        .openOn(map);
+    },
   });
 
-  map.on("click", (e) => {
-    setLocations((prevState) => {
-      return [e.latlng];
+  useEffect(() => {
+    map.locate();
+  }, []);
+
+  let markers;
+
+  if (ctx.positions !== null) {
+    markers = ctx.positions.map((coord, i) => {
+      return (
+        <Marker key={i} position={coord}>
+          <Popup>You clicked here</Popup>
+        </Marker>
+      );
     });
-  });
+  }
 
-  let points = locations.map((e, i) => {
-    return <Marker key={i} position={e}></Marker>;
-  });
-  return points;
+  return <div>{ctx.positions === null ? null : markers}</div>;
 }
