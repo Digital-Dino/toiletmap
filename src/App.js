@@ -1,22 +1,18 @@
 import Layout from "./components/Layout";
 import UI from "./components/UI";
 import Map from "./components/Map";
-import PositionsCon from "./PositionsCon";
+import EventsCtx from "./EventsCtx";
 import { useState } from "react";
 
 function App() {
-  const [markers, setMarkers] = useState(null);
-  const value = {
-    positions: markers,
-    setPositions: setMarkers,
-  };
+  const [events, setEvents] = useState(null);
   return (
-    <PositionsCon.Provider value={value}>
-      <Layout>
+    <Layout>
+      <EventsCtx.Provider value={{ events: events, setEvents: setEvents }}>
         <UI></UI>
         <Map></Map>
-      </Layout>
-    </PositionsCon.Provider>
+      </EventsCtx.Provider>
+    </Layout>
   );
 }
 

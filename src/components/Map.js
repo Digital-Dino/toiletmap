@@ -1,7 +1,6 @@
 import { MapContainer } from "react-leaflet/MapContainer";
-import { Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
-import Locate from "./Locate";
-import { useState } from "react";
+import { TileLayer } from "react-leaflet";
+import CreateEvent from "./CreateEvent";
 
 export default function Map(props) {
   return (
@@ -23,7 +22,8 @@ export default function Map(props) {
           attribution="Tiles &copy; Esri | Leaflet"
           url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
         />
-        <Locate></Locate>
+
+        <CreateEvent></CreateEvent>
       </MapContainer>
     </div>
   );
