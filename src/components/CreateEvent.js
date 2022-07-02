@@ -25,15 +25,11 @@ function Form(props) {
 
     console.log(ctx.events);
     console.log(e.target.id);
-    let newEvents = ctx.events.filter((f, i) => {
-      if (f.key === e.target.id) {
-        ctx.setEvents((prevState) => {
-          console.log(prevState);
-          let newEvents2 = prevState.splice(i, 0, <span>Test</span>);
-          console.log(newEvents2);
-          return newEvents2;
-        });
-      }
+    ctx.setEvents((prevState) => {
+      let newEvents = prevState.filter((f, i) => {
+        return f.key !== e.target.id;
+      });
+      return [...newEvents, <span>The completed form data</span>];
     });
 
     props.setMarkers((prevState) => {

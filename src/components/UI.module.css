@@ -1,6 +1,6 @@
 .ui-pane {
   flex-basis: 25%;
-  min-width: 400px;
+  min-width: 25%;
   background-color: darkgray;
   padding: 1rem;
 }
