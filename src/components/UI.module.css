@@ -3,4 +3,5 @@
   min-width: 25%;
   background-color: darkgray;
   padding: 1rem;
+  overflow-y: auto;
 }

@@ -1,20 +1,31 @@
-import { useContext, useEffect } from "react";
-import { useMapEvents, useMap, Marker, Popup } from "react-leaflet";
+import { useContext, useEffect, useId } from "react";
+import { useMapEvents, Marker, Popup, useMap } from "react-leaflet";
 import EventsCtx from "../EventsCtx";
 import classes from "./CreateEvent.module.css";
 
+function Card(props) {
+  function handleClick(e) {
+    props.map.flyTo(props.position);
+  }
+  return (
+    <div onClick={handleClick} className={classes.card}>
+      <div>{props.data.rec === "no" ? "Not Recommended" : "Recommended"}</div>
+      <div>Clealiness Score: {props.data.clean}</div>
+      <div>Overall Rating: {props.data.rate}</div>
+    </div>
+  );
+}
+
 function Form(props) {
   const ctx = useContext(EventsCtx);
+  const formId = useId();
   function handleSubmit(e) {
     e.preventDefault();
     let formData = new FormData(e.target);
     let data = Object.fromEntries(formData);
-    console.log(data);
+
     let newMarker = (
-      <Marker
-        key={props.id}
-        position={[props.location.lat, props.location.lng]}
-      >
+      <Marker key={formId} position={[props.location.lat, props.location.lng]}>
         <Popup>
           I would {data.rec === "yes" ? "recommend" : "not recommend"} using the
           bathroom here. I give it a score of {data.rate + "/10"} and its
@@ -23,13 +34,19 @@ function Form(props) {
       </Marker>
     );
 
-    console.log(ctx.events);
-    console.log(e.target.id);
     ctx.setEvents((prevState) => {
       let newEvents = prevState.filter((f, i) => {
         return f.key !== e.target.id;
       });
-      return [...newEvents, <span>The completed form data</span>];
+      return [
+        ...newEvents,
+        <Card
+          position={[props.location.lat, props.location.lng]}
+          key={formId}
+          data={data}
+          map={props.map}
+        />,
+      ];
     });
 
     props.setMarkers((prevState) => {
@@ -86,6 +103,7 @@ function Form(props) {
 
 export default function CreateEvent(props) {
   const ctx = useContext(EventsCtx);
+  const mapView = useMap();
   const map = useMapEvents({
     click(e) {
       ctx.setEvents((prevState) => {
@@ -93,9 +111,10 @@ export default function CreateEvent(props) {
         let newPoint = (
           <Form
             setMarkers={props.setMarkers}
-            key={key}
             id={key}
+            key={key}
             location={e.latlng}
+            map={mapView}
           />
         );
         if (prevState) {
