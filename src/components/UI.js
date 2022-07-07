@@ -4,12 +4,12 @@ import EventsCtx from "../EventsCtx";
 
 export default function UI(props) {
   const ctx = useContext(EventsCtx);
-  let form;
+  let events;
   if (ctx.events) {
-    form = ctx.events.map((e, i) => {
+    events = ctx.events.map((e, i) => {
       return e;
     });
   }
 
-  return <div className={classes["ui-pane"]}>{form}</div>;
+  return <div className={classes["ui-pane"]}>{events}</div>;
 }
