@@ -1,4 +1,3 @@
-import { latLng } from "leaflet";
 import classes from "./CreateEvent.module.css";
 
 export default function Card(props) {

@@ -1,19 +1,20 @@
 import classes from "./CreateEvent.module.css";
-import { useContext, useId } from "react";
-import EventsCtx from "../EventsCtx";
+import { useEffect, useId } from "react";
 import Card from "./Card";
 import { Marker, Popup } from "react-leaflet";
 
 export default function Form(props) {
-  const ctx = useContext(EventsCtx);
   const formId = useId();
   function handleSubmit(e) {
     e.preventDefault();
     let formData = new FormData(e.target);
     let data = Object.fromEntries(formData);
-    let eventsFiltered = ctx.events.filter((f) => e.target.id !== f.key);
+    data.position = [props.location.lat, props.location.lng];
     let key = Number(Math.random().toFixed(3));
-    ctx.setEvents((prevState) => {
+    data.id = key;
+    localStorage.setItem(key, JSON.stringify(data));
+    props.setEvents((prevState) => {
+      let eventsFiltered = prevState.filter((f) => e.target.id !== f.key);
       if (prevState) {
         return [
           <Card
@@ -54,6 +55,8 @@ export default function Form(props) {
       }
     });
   }
+
+  useEffect(() => {});
 
   return (
     <form
